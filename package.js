@@ -1,5 +1,5 @@
 Package.describe({
-  summary: "Reaction Stripe - Stripe Payment Module for Reaction Commerce"
+  summary: "Reaction Stripe - Stripe Payment Module for Reaction commerce"
 });
 
 Package.on_use(function (api, where) {
