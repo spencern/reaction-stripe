@@ -7,4 +7,11 @@ Meteor.app.packages.register(
   settingsRoute: "stripe"
   hasWidget: false
   priority: "2"
+  shopPermissions: [
+    {
+      label: "Stripe Payments"
+      permission: "dashboard/payments"
+      group: "Shop Settings"
+    }
+  ]
 )
