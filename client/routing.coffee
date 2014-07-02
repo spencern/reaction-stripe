@@ -1,3 +1,7 @@
 Router.map ->
-  @route "stripe",
-      controller: ShopController
+  @route 'stripe',
+    controller: ShopAdminController
+    path: 'dashboard/settings/stripe',
+    template: 'stripe'
+    waitOn: ->
+      PackagesHandle
