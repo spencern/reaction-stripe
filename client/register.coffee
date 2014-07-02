@@ -5,7 +5,7 @@ Meteor.app.packages.register(
   description: "Stripe Payment for Reaction Commerce"
   icon: "fa fa-globe"
   settingsRoute: "stripe"
-  hasWidget: false
+  hasWidget: true
   priority: "2"
   shopPermissions: [
     {
