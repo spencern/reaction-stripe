@@ -17,12 +17,10 @@ Package.on_use(function (api, where) {
     "client/register.coffee",
     "client/routing.coffee",
 
-    "client/templates/helloworld/helloworld.html",
-    "client/templates/helloworld/helloworld.coffee",
-    "client/templates/helloworld/helloworld.less",
+    "client/templates/stripe/stripe.html",
+    "client/templates/stripe/stripe.coffee",
 
     "client/templates/dashboard/widget/widget.html",
-    "client/templates/dashboard/widget/widget.coffee",
-    "client/templates/dashboard/widget/widget.less"
+    "client/templates/dashboard/widget/widget.coffee"
   ], ["client"]);
 });
