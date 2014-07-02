@@ -7,6 +7,6 @@ Meteor.app.packages.register(
   settingsRoute: 'stripe/settings'
   overviewRoute: "stripe"
   template: "stripe"
-  hasWidget: true
+  hasWidget: false
   priority: "2"
 )
