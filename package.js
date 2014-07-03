@@ -27,4 +27,9 @@ Package.on_use(function (api, where) {
     "client/templates/dashboard/widget/widget.html",
     "client/templates/dashboard/widget/widget.coffee"
   ], ["client"]);
+  
+  api.export([
+    "StripePackageSchema",
+  ], ["client", "server"]);
+  
 });
