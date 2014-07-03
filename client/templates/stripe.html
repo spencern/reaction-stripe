@@ -1,6 +1,16 @@
 <template name="stripe">
-<div class="stripe">
-  <h1>{{message}}</h1>
-  <p>{{description}}</p>
+<div class="row">
+  <h2>Stripe<small> Settings</small></h2>
+</div>
+<div class="row">
+  <div class="col-md-6 well">
+    {{#autoForm collection="Packages" schema="StripePackageSchema" doc=packageData type="update" id="stripe-update-form"}}
+      <div class="form-group">
+      	Don't have a Stripe API key? <a href="https://dashboard.stripe.com/account/apikeys" target="_blank">Get them here.</a> (Need to be signed in)
+      </div>
+      {{>afQuickField name='settings.api_key'}}
+      <button type="submit" class="btn btn-primary pull-right">Update</button>
+    {{/autoForm}}
+  </div>
 </div>
 </template>
