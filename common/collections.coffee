@@ -1,4 +1,4 @@
-@PaypalPackageSchema = new SimpleSchema([
+@StripePackageSchema = new SimpleSchema([
   PackageConfigSchema
   {
     "settings.api_key":
@@ -8,3 +8,4 @@
   }
 ])
 
+StripePackageSchema = @StripePackageSchema
