@@ -1,4 +1,4 @@
-PayPal = Npm.require("paypal-rest-sdk")
+PayPal = Npm.require("stripe")
 Fiber = Npm.require("fibers")
 Future = Npm.require("fibers/future")
 
