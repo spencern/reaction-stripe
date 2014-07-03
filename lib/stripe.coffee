@@ -1,12 +1,7 @@
-Meteor.Paypal =
-  account_options: ->
-    settings = Packages.findOne(name: "reaction-paypal").settings
-    if settings.mode is true then mode = "live" else mode = "sandbox"
-    options =
-      mode: mode
-      client_id: settings.client_id
-      client_secret: settings.client_secret
-    return options
+Meteor.Stripe =
+  api_key: -> #was_account_options
+    settings = Packages.findOne(name: "reaction-stripe").settings
+    return settings.api_key
 
   #authorize submits a payment authorization to Paypal
   authorize: (card_info, payment_info, callback) ->
