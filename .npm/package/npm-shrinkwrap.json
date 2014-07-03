@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "stripe": {
+      "version": "2.7.3",
+      "dependencies": {
+        "when": {
+          "version": "3.1.0"
+        }
+      }
+    }
+  }
+}
