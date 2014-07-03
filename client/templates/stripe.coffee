@@ -1,5 +1,12 @@
-Template.stripe.message = ->
-  "This is Stripe Payments for Reaction Commerce!"
+Template.stripe.helpers
+  packageData: ->
+    return Packages.findOne({name:"reaction-stripe"})
 
-Template.stripe.description = ->
-  "stripe payments wrapped for reaction commerce"
+AutoForm.hooks "stripe-update-form":
+  onSuccess: (operation, result, template) ->
+    Alerts.removeSeen()
+    Alerts.add "Stripe settings saved.", "success"
+
+  onError: (operation, error, template) ->
+    Alerts.removeSeen()
+    Alerts.add "Stripe settings update failed. " + error, "danger"
