@@ -21,11 +21,8 @@ Package.on_use(function (api, where) {
     "client/register.coffee",
     "client/routing.coffee",
 
-    "client/templates/stripe/stripe.html",
-    "client/templates/stripe/stripe.coffee",
-
-    "client/templates/dashboard/widget/widget.html",
-    "client/templates/dashboard/widget/widget.coffee"
+    "client/templates/stripe.html",
+    "client/templates/stripe.coffee"
   ], ["client"]);
   
   api.export([
