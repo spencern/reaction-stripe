@@ -6,7 +6,7 @@
   <div class="col-md-6 well">
     {{#autoForm collection="Packages" schema="StripePackageSchema" doc=packageData type="update" id="stripe-update-form"}}
       <div class="form-group">
-      	Don't have a Stripe API key? <a href="https://dashboard.stripe.com/account/apikeys" target="_blank">Get it here.</a> (Need to be signed in)
+      	Don't have a Stripe API key? <a href="https://dashboard.stripe.com/account/apikeys" target="_blank">Get it here.</a> (Need to sign in)
       </div>
       {{>afQuickField name='settings.api_key'}}
       <button type="submit" class="btn btn-primary pull-right">Update</button>
