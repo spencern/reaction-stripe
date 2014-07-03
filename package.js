@@ -16,6 +16,7 @@ Package.on_use(function (api, where) {
     "reaction-core"
   ], ["client", "server"]);
 
+  api.add_files("common/collections.coffee",["client","server"]);
   api.add_files([
     "client/register.coffee",
     "client/routing.coffee",
