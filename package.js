@@ -5,7 +5,9 @@ Package.describe({
 Package.on_use(function (api, where) {
   api.use([
     "standard-app-packages",
-    "coffeescript"
+    "coffeescript",
+    "simple-schema",
+    "autoform"
   ], ["client", "server"]);
   api.use([
     "iron-router",
