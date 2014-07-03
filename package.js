@@ -2,18 +2,19 @@ Package.describe({
   summary: "Reaction Stripe - Stripe Payment Module for Reaction commerce"
 });
 
+Npm.depends({'stripe': '2.7.3'});
+
 Package.on_use(function (api, where) {
   api.use([
-    "standard-app-packages",
+    "templating",
     "coffeescript",
-    "simple-schema",
-    "autoform"
-  ], ["client", "server"]);
-  api.use([
     "iron-router",
+    "simple-schema",
+    "autoform",
+    "underscore-string-latest",
     "less",
     "reaction-core"
-  ], ["client"]);
+  ], ["client", "server"]);
 
   api.add_files([
     "client/register.coffee",
