@@ -32,3 +32,18 @@ StripePackageSchema = @StripePackageSchema
     label: "CVV"
 
 StripePaymentSchema = @StripePaymentSchema
+
+###
+# Fixture - we always want a record
+###
+Meteor.startup ->
+  unless Packages.findOne({name:"reaction-stripe"})
+    Shops.find().forEach (shop) ->
+      unless Meteor.settings.stripe
+        Meteor.settings.stripe =
+          api_key: ""
+
+      Packages.insert
+        shopId: shop._id
+        name: "reaction-stripe"
+        settings: Meteor.settings.stripe
