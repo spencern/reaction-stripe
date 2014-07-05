@@ -34,7 +34,7 @@ StripePackageSchema = @StripePackageSchema
 StripePaymentSchema = @StripePaymentSchema
 
 ###
-# fixture - we always want a record
+# Fixture - we always want a record
 ###
 Meteor.startup ->
   unless Packages.findOne({name:"reaction-stripe"})
