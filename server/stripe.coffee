@@ -6,8 +6,12 @@ Stripe.setApiKey(Packages.findOne(name: "reaction-stripe").settings.api_key)
     
 Meteor.methods
   #submit (sale, authorize)
-  stripeSubmit: (transaction_type, cardData, paymentData) ->
+  stripeSubmit: (cardData, paymentData) ->
     
+    Stripe.charges.create
+      amount: paymentData.amount
+      currency: paymentData.currency
+      card: cardData
     
     payment_json = Meteor.Paypal.payment_json()
     payment_json.intent = transaction_type
