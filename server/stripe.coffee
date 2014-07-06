@@ -1,10 +1,12 @@
+Stripe = require("stripe")
 Fiber = Npm.require("fibers")
 Future = Npm.require("fibers/future")
 
 Meteor.methods
   #submit (sale, authorize)
   stripeSubmit: (transaction_type, cardData, paymentData) ->
-    stripe = require("stripe")(Meteor.Stripe.api_key())
+    
+    Stripe.setApiKey(Meteor.Stripe.api_key())
     payment_json = Meteor.Paypal.payment_json()
     payment_json.intent = transaction_type
     payment_json.payer.funding_instruments.push Meteor.Paypal.parseCardData(cardData)
