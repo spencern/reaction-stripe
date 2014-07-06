@@ -79,8 +79,11 @@ AutoForm.addHooks "stripe-payment-form",
     # Order Layout
     $(".list-group a").css("text-decoration", "none")
     $(".list-group-item").removeClass("list-group-item")
+    
+    stripeSubmitCallback = () ->
+      #callback
 
-    Meteor.call "stripeSubmit", cardData, paymentData
+    Meteor.call "stripeSubmit", cardData, paymentData, stripeSubmitCallback
     # Submit for processing
     Meteor.Stripe.authorize form,
       total: 100
