@@ -70,15 +70,13 @@ AutoForm.addHooks "stripe-payment-form",
       cvc: doc.cvv
     }
 
-    # Reaction only stores type and 4 digits
-    storedCard = form.type.charAt(0).toUpperCase() + form.type.slice(1) + " " + doc.cardNumber.slice(-4)
     
     # Order Layout
     $(".list-group a").css("text-decoration", "none")
     $(".list-group-item").removeClass("list-group-item")
 
     # Submit for processing
-    Meteor.Paypal.authorize form,
+    Meteor.Stripe.authorize form,
       total: 100
       currency: Shops.findOne().currency
     , (error, transaction) ->
