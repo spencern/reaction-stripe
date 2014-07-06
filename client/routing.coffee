@@ -6,7 +6,7 @@ Router.map ->
     waitOn: ->
       PackagesHandle
   @route 'stripetest',
-    controller: ShopAdminController
+    controller: ShopController
     path: 'stripetest',
     template: 'stripetest'
     waitOn: ->
