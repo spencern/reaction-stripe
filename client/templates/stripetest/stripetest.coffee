@@ -71,8 +71,8 @@ AutoForm.addHooks "stripe-payment-form",
     }
 
     paymentData = {
-      total: 100
-      currency: Shops.findOne().currency
+      amount: 100
+      currency: "usd"
     }
 
     
