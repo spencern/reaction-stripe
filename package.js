@@ -22,7 +22,9 @@ Package.on_use(function (api, where) {
     "client/routing.coffee",
 
     "client/templates/stripe.html",
-    "client/templates/stripe.coffee"
+    "client/templates/stripe.coffee",
+    "client/templates/stripetest/stripetest.html",
+    "client/templates/stripetest/stripetest.coffee"
   ], ["client"]);
   
   api.export([
