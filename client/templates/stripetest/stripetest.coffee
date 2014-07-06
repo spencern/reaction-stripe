@@ -62,7 +62,7 @@ AutoForm.addHooks "stripe-payment-form",
     hidePaymentAlert()
 
     # Format data for paypal
-    form = {
+    cardData = {
       name: doc.payerName
       number: doc.cardNumber
       exp_month: doc.expireMonth
@@ -70,12 +70,17 @@ AutoForm.addHooks "stripe-payment-form",
       cvc: doc.cvv
     }
 
+    paymentData = {
+      total: 100
+      currency: Shops.findOne().currency
+    }
+
     
     # Order Layout
     $(".list-group a").css("text-decoration", "none")
     $(".list-group-item").removeClass("list-group-item")
 
-    Meteor.call 
+    Meteor.call "stripeSubmit", cardData, paymentData, 
     # Submit for processing
     Meteor.Stripe.authorize form,
       total: 100
