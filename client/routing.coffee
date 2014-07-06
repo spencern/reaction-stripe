@@ -11,3 +11,10 @@ Router.map ->
     template: 'stripetest'
     waitOn: ->
       PackagesHandle
+  
+  @route 'test',
+    controller: ShopAdminController
+    path: 'test',
+    template: 'test'
+    waitOn: ->
+      PackagesHandle
