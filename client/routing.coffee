@@ -9,5 +9,3 @@ Router.map ->
     controller: ShopAdminController
     path: 'stripetest'
     template: 'stripetest'
-    waitOn: ->
-      PackagesHandle
