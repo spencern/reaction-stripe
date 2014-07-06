@@ -54,7 +54,7 @@ Template.paypalPaymentForm.helpers
 # used to track asynchronous submitting for UI changes
 submitting = false
 
-AutoForm.addHooks "paypal-payment-form",
+AutoForm.addHooks "stripe-payment-form",
   onSubmit: (doc) ->
     # Process form (pre-validated by autoform)
     submitting = true
@@ -63,11 +63,11 @@ AutoForm.addHooks "paypal-payment-form",
 
     # Format data for paypal
     form = {
-      first_name: doc.payerName
+      name: doc.payerName
       number: doc.cardNumber
-      expire_month: doc.expireMonth
-      expire_year: doc.expireYear
-      cvv2: doc.cvv
+      exp_month: doc.expireMonth
+      exp_year: doc.expireYear
+      cvc: doc.cvv
     }
 
     # Reaction only stores type and 4 digits
@@ -79,7 +79,7 @@ AutoForm.addHooks "paypal-payment-form",
 
     # Submit for processing
     Meteor.Paypal.authorize form,
-      total: Session.get "cartTotal"
+      total: 100
       currency: Shops.findOne().currency
     , (error, transaction) ->
       submitting = false
