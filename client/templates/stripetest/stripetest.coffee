@@ -75,6 +75,7 @@ AutoForm.addHooks "stripe-payment-form",
     $(".list-group a").css("text-decoration", "none")
     $(".list-group-item").removeClass("list-group-item")
 
+    Meteor.call 
     # Submit for processing
     Meteor.Stripe.authorize form,
       total: 100

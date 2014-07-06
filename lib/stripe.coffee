@@ -1,7 +1,4 @@
-Meteor.Stripe =
-  api_key: -> #was_account_options
-    settings = Packages.findOne(name: "reaction-stripe").settings
-    return settings.api_key
+
 
   #authorize submits a payment authorization to Paypal
   authorize: (card_info, payment_info, callback) ->
