@@ -3,8 +3,6 @@ Router.map ->
     controller: ShopAdminController
     path: 'dashboard/settings/stripe',
     template: 'stripe'
-    waitOn: ->
-      PackagesHandle
   @route 'stripetest',
     controller: ShopAdminController
     path: 'stripetest',
