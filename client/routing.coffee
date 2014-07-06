@@ -8,6 +8,6 @@ Router.map ->
   @route 'stripetest',
     controller: ShopAdminController
     path: 'stripetest',
-    template: 'stripetest'
+    template: 'test'
     waitOn: ->
       PackagesHandle
