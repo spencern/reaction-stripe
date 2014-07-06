@@ -1,14 +1,3 @@
-getCardType = (number) ->
-  re = new RegExp("^4")
-  return "visa"  if number.match(re)?
-  re = new RegExp("^(34|37)")
-  return "amex"  if number.match(re)?
-  re = new RegExp("^5[1-5]")
-  return "mastercard"  if number.match(re)?
-  re = new RegExp("^6011")
-  return "discover"  if number.match(re)?
-  ""
-
 uiEnd = (template, buttonText) ->
   template.$(":input").removeAttr("disabled")
   template.$("#btn-complete-order").text(buttonText)
@@ -35,9 +24,6 @@ handlePaypalSubmitError = (error) ->
     paymentAlert("Oops! " + serverError)
 
 Template.paypalPaymentForm.helpers
-  cartPayerName: ->
-    Cart.findOne()?.payment?.address?.fullName
-
   monthOptions: () ->
     monthOptions =
       [
@@ -75,18 +61,13 @@ AutoForm.addHooks "paypal-payment-form",
     template = this.template
     hidePaymentAlert()
 
-    # regEx in the schema ensures that there will be exactly two names with one space between
-    payerNamePieces = doc.payerName.split " "
-
     # Format data for paypal
     form = {
-      first_name: payerNamePieces[0]
-      last_name: payerNamePieces[1]
+      first_name: doc.payerName
       number: doc.cardNumber
       expire_month: doc.expireMonth
       expire_year: doc.expireYear
       cvv2: doc.cvv
-      type: getCardType(doc.cardNumber)
     }
 
     # Reaction only stores type and 4 digits
