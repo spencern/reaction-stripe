@@ -11,11 +11,4 @@ Router.map ->
     template: 'stripetest'
     waitOn: ->
       PackagesHandle
-  
-  @route 'paypaltest',
-    controller: ShopAdminController
-    path: 'paypaltest',
-    template: 'paypalPaymentForm'
-    waitOn: ->
-      PackagesHandle
       
