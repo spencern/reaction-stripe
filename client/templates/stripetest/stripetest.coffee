@@ -60,7 +60,8 @@ AutoForm.addHooks "stripe-payment-form",
     submitting = true
     template = this.template
     hidePaymentAlert()
-
+    
+    console.log "success"
     # Format data for paypal
     cardData = {
       name: doc.payerName
