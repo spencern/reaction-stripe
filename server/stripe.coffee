@@ -4,9 +4,8 @@ Future = Npm.require("fibers/future")
 
 test = Packages.findOne(name: "reaction-stripe").settings.api_key
 console.log test
+Stripe.setApiKey(test)
 ###
-Stripe.setApiKey()
-
 Meteor.methods
   #submit (sale, authorize)
   stripeSubmit: (cardData, paymentData) ->
