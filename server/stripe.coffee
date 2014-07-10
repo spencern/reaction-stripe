@@ -17,7 +17,7 @@ Meteor.methods
       card: cardData
     , (err, charge) ->
       console.log err
-      onsole.log charge
+      console.log charge
       
     fut.wait()
     
