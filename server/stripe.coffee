@@ -1,6 +1,6 @@
 
 console.log "test"
-Stripe = require("stripe")
+Stripe = Npm.require("stripe")
 Fiber = Npm.require("fibers")
 Future = Npm.require("fibers/future")
 ###
