@@ -1,4 +1,3 @@
-console.log "something"
 @StripePackageSchema = new SimpleSchema([
   PackageConfigSchema
   {
