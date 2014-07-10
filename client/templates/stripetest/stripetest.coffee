@@ -83,48 +83,6 @@ AutoForm.addHooks "stripe-payment-form",
     stripeSubmitCallback = () ->
       #callback
 
-    Meteor.call "stripeSubmit", cardData, paymentData, stripeSubmitCallback
-    # Submit for processing
-    Meteor.Stripe.authorize form,
-      total: 100
-      currency: Shops.findOne().currency
-    , (error, transaction) ->
-      submitting = false
-      if error
-        # this only catches connection/authentication errors
-        handlePaypalSubmitError(error)
-        # Hide processing UI
-        uiEnd(template, "Resubmit payment")
-        return
-      else
-        if transaction.saved is true #successful transaction
-          # Format the transaction to store with order and submit to CartWorkflow
-          paymentMethod =
-            processor: "Paypal"
-            storedCard: storedCard
-            method: transaction.payment.payer.payment_method
-            transactionId: transaction.payment.transactions[0].related_resources[0].authorization.id
-            amount: transaction.payment.transactions[0].amount.total
-            status: transaction.payment.state
-            mode: transaction.payment.intent
-            createdAt: new Date(transaction.payment.create_time)
-            updatedAt: new Date(transaction.payment.update_time)
-
-          # Store transaction information with order
-          # paymentMethod will auto transition to
-          # CartWorkflow.paymentAuth() which
-          # will create order, clear the cart, and update inventory,
-          # and goto order confirmation page
-          CartWorkflow.paymentMethod(paymentMethod)
-          return
-        else # card errors are returned in transaction
-          handlePaypalSubmitError(transaction.error)
-          # Hide processing UI
-          uiEnd(template, "Resubmit payment")
-          return
-
-    return false;
-    
   beginSubmit: (formId, template) ->
     # Show Processing
     template.$(":input").attr("disabled", true)
