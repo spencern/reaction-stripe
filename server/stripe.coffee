@@ -8,10 +8,18 @@ Meteor.methods
   #submit (sale, authorize)
   stripeSubmit: (cardData, paymentData) ->
     
+    fut = new Future()
+    @unblock()
+    
     Stripe.charges.create
       amount: paymentData.amount
       currency: paymentData.currency
       card: cardData
+    , (err, charge) ->
+      console.log err
+      onsole.log charge
+      
+    fut.wait()
     
     payment_json = Meteor.Paypal.payment_json()
     payment_json.intent = transaction_type
