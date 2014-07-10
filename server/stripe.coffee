@@ -19,5 +19,7 @@ Meteor.methods
       console.log err
       console.log charge
       
+    console.log "hellO"
+      
     fut.wait()
     
