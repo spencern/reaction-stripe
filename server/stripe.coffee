@@ -8,8 +8,6 @@ Future = Npm.require("fibers/future")
 Meteor.methods
   #submit (sale, authorize)
   stripeSubmit: (cardData, paymentData) ->
-    fut = new Future()
-    @unblock()
     
     Stripe.charges.create
       amount: paymentData.amount
@@ -20,6 +18,4 @@ Meteor.methods
       console.log charge
       
     console.log "hellO"
-      
-    fut.wait()
     
