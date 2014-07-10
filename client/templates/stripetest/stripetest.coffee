@@ -60,7 +60,7 @@ AutoForm.addHooks "stripe-payment-form",
     submitting = true
     template = this.template
     hidePaymentAlert()
-    
+
     # Format data for paypal
     cardData = {
       name: doc.payerName
@@ -82,6 +82,8 @@ AutoForm.addHooks "stripe-payment-form",
     
     stripeSubmitCallback = () ->
       #callback
+
+    Meteor.call "stripeSubmit", cardData, paymentData, stripeSubmitCallback
 
   beginSubmit: (formId, template) ->
     # Show Processing
