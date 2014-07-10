@@ -3,7 +3,7 @@ console.log "test"
 Stripe = Npm.require("stripe")
 Fiber = Npm.require("fibers")
 Future = Npm.require("fibers/future")
-###
+
 Stripe.setApiKey(Packages.findOne(name: "reaction-stripe").settings.api_key)
 
 console.log "hello"
@@ -25,4 +25,3 @@ Meteor.methods
     fut.wait()
     
     
-###
