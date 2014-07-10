@@ -1,3 +1,5 @@
+
+console.log "test"
 Stripe = require("stripe")
 Fiber = Npm.require("fibers")
 Future = Npm.require("fibers/future")
@@ -9,7 +11,6 @@ console.log "hello"
 Meteor.methods
   #submit (sale, authorize)
   stripeSubmit: (cardData, paymentData) ->
-    console.log "test"
     fut = new Future()
     @unblock()
     
