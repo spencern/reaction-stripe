@@ -23,7 +23,7 @@ handlePaypalSubmitError = (error) ->
   else if serverError
     paymentAlert("Oops! " + serverError)
 
-Template.paypalPaymentForm.helpers
+Template.stripetest.helpers
   monthOptions: () ->
     monthOptions =
       [
