@@ -1,4 +1,4 @@
-api_key = Packages.findOne(name: "reaction-stripe").settings.api_key
+#api_key = Packages.findOne(name: "reaction-stripe").settings.api_key
 
 Stripe = Npm.require("stripe")(api_key)
 Fiber = Npm.require("fibers")
