@@ -5,10 +5,4 @@ Router.map ->
     template: 'stripe'
     waitOn: ->
       PackagesHandle
-  @route 'stripetest',
-    controller: ShopAdminController
-    path: 'stripetest',
-    template: 'stripetest'
-    waitOn: ->
-      PackagesHandle
       
