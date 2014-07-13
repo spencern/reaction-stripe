@@ -1,5 +1,4 @@
-api_key = Packages.findOne(name: "reaction-stripe").settings.api_key
-Stripe = Npm.require("stripe")(api_key)
+
 Fiber = Npm.require("fibers")
 Future = Npm.require("fibers/future")
 
@@ -7,6 +6,10 @@ Future = Npm.require("fibers/future")
 Meteor.methods
   #submit (sale, authorize)
   stripeSubmit: (cardData, paymentData) ->
+
+    api_key = Packages.findOne(name: "reaction-stripe").settings.api_key
+    Stripe = Npm.require("stripe")(api_key)
+
     fut = new Future()
     @unblock()
     
