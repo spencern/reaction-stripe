@@ -24,8 +24,8 @@ Package.on_use(function (api, where) {
 
     "client/templates/stripe.html",
     "client/templates/stripe.coffee",
-    "client/templates/stripetest/stripetest.html",
-    "client/templates/stripetest/stripetest.coffee"
+    "client/templates/stripePaymentForm/stripePaymentForm.html",
+    "client/templates/stripePaymentForm/stripePaymentForm.coffee"
   ], ["client"]);
   
   api.export([
