@@ -1,3 +1,6 @@
+
+#TODO: Better SimpleSchema Validation?
+
 @StripePackageSchema = new SimpleSchema([
   PackageConfigSchema
   {
@@ -12,8 +15,7 @@ StripePackageSchema = @StripePackageSchema
 @StripePaymentSchema = new SimpleSchema
   payerName:
     type: String
-    label: "Cardholder name",
-    regEx: /^\w+\s\w+$/
+    label: "Cardholder name"
   cardNumber:
     type: String
     min: 16
