@@ -23,7 +23,7 @@ handlePaypalSubmitError = (error) ->
   else if serverError
     paymentAlert("Oops! " + serverError)
 
-Template.paypalPaymentForm.helpers
+Template.stripePaymentForm.helpers
   monthOptions: () ->
     monthOptions =
       [
@@ -71,7 +71,7 @@ AutoForm.addHooks "stripe-payment-form",
     }
 
     paymentData = {
-      amount: 100
+      amount: Session.get "cartTotal"
       currency: "usd"
     }
 
