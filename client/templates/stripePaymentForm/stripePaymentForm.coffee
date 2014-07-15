@@ -1,4 +1,3 @@
-console.log typeof 
 uiEnd = (template, buttonText) ->
   template.$(":input").removeAttr("disabled")
   template.$("#btn-complete-order").text(buttonText)
