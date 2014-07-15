@@ -74,7 +74,7 @@ AutoForm.addHooks "stripe-payment-form",
 
     paymentData = {
       # Stripe requires the amount to be a positive integer in the smallest currency unit (cent)
-      amount: parseFloat(Session.get("cartTotal")) * 100 
+      amount: parseFloat(Session.get("cartTotal")) * 100 # Assumes currency is USD. Need to refactor to be based on shop currency
       currency: Shops.findOne().currency
     }
 
