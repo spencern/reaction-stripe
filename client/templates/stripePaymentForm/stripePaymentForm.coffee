@@ -1,3 +1,4 @@
+console.log typeof 
 uiEnd = (template, buttonText) ->
   template.$(":input").removeAttr("disabled")
   template.$("#btn-complete-order").text(buttonText)
@@ -71,8 +72,9 @@ AutoForm.addHooks "stripe-payment-form",
     }
 
     paymentData = {
-      amount: Session.get "cartTotal"
-      currency: "usd"
+      # Stripe requires the amount to be a positive integer in the smallest currency unit (cent)
+      amount: parseFloat(Session.get("cartTotal")) * 100 
+      currency: Shops.findOne().currency
     }
 
     
