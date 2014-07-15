@@ -18,8 +18,18 @@ Meteor.methods
       currency: paymentData.currency
       card: cardData
     , (err, charge) ->
-      console.log err
-      console.log charge
+      if err
+        fut.return
+          saved: false
+          error: err
+      else
+        fut.return
+          saved: true
+          payment: payment
+      return
+    , (e) ->
+      console.error e
+      return
       
     fut.wait()
     

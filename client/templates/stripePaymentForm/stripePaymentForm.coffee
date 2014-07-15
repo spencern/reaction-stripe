@@ -1,3 +1,14 @@
+getCardType = (number) ->
+  re = new RegExp("^4")
+  return "visa"  if number.match(re)?
+  re = new RegExp("^(34|37)")
+  return "amex"  if number.match(re)?
+  re = new RegExp("^5[1-5]")
+  return "mastercard"  if number.match(re)?
+  re = new RegExp("^6011")
+  return "discover"  if number.match(re)?
+  ""
+
 uiEnd = (template, buttonText) ->
   template.$(":input").removeAttr("disabled")
   template.$("#btn-complete-order").text(buttonText)
@@ -78,6 +89,9 @@ AutoForm.addHooks "stripe-payment-form",
       currency: "usd" # Shops.findOne().currency
     }
 
+    # Reaction only stores type and 4 digits
+    storedCard = getCardType(doc.cardNumber).charAt(0).toUpperCase() + getCardType(doc.cardNumber).slice(1) + " " + doc.cardNumber.slice(-4)
+
     
     # Order Layout
     $(".list-group a").css("text-decoration", "none")
@@ -99,8 +113,8 @@ AutoForm.addHooks "stripe-payment-form",
             processor: "Stripe"
             storedCard: storedCard
             method: transaction.payment.payer.payment_method
-            transactionId: transaction.payment.transactions[0].related_resources[0].authorization.id
-            amount: transaction.payment.transactions[0].amount.total
+            transactionId: transaction.payment.id
+            amount: transaction.payment.amount
             status: transaction.payment.state
             mode: transaction.payment.intent
             createdAt: new Date(transaction.payment.create_time)
