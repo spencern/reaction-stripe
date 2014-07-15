@@ -24,6 +24,9 @@ handlePaypalSubmitError = (error) ->
     paymentAlert("Oops! " + serverError)
 
 Template.stripePaymentForm.helpers
+  cartPayerName: ->
+    Cart.findOne()?.payment?.address?.fullName
+
   monthOptions: () ->
     monthOptions =
       [
@@ -61,7 +64,6 @@ AutoForm.addHooks "stripe-payment-form",
     template = this.template
     hidePaymentAlert()
 
-    # Format data for paypal
     cardData = {
       name: doc.payerName
       number: doc.cardNumber
