@@ -17,7 +17,7 @@ Meteor.methods
       amount: paymentData.amount
       currency: paymentData.currency
       card: cardData
-    , (err, charge) ->
+    , (err, payment) ->
       if err
         fut.return
           saved: false
