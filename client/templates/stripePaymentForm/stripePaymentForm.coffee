@@ -20,8 +20,7 @@ paymentAlert = (errorMessage) ->
 hidePaymentAlert = () ->
   $(".alert").addClass("hidden").text('')
 
-handlePaypalSubmitError = (error) ->
-  # Depending on what they are, errors come back from PayPal in various formats
+handlePaypalSubmitError = (error) -> #Paypal Error Handling
   singleError = error?.response?.error_description
   serverError = error?.response?.message
   errors = error?.response?.details || []
@@ -102,13 +101,15 @@ AutoForm.addHooks "stripe-payment-form",
       submitting = false
       if error
         # this only catches connection/authentication errors
-        handlePaypalSubmitError(error)
+        handleStripeSubmitError(error)
         # Hide processing UI
         uiEnd(template, "Resubmit payment")
         return
       else
         if transaction.saved is true #successful transaction
-          # Format the transaction to store with order and submit to CartWorkflow
+
+          # This is where we need to decide how much of the Stripe  
+          # response object we need to pass to CartWorkflow
           paymentMethod =
             processor: "Stripe"
             storedCard: storedCard
@@ -119,6 +120,21 @@ AutoForm.addHooks "stripe-payment-form",
             mode: transaction.payment.intent
             createdAt: new Date(transaction.payment.create_time)
             updatedAt: new Date(transaction.payment.update_time)
+
+          # Store transaction information with order
+          # paymentMethod will auto transition to
+          # CartWorkflow.paymentAuth() which
+          # will create order, clear the cart, and update inventory,
+          # and goto order confirmation page
+          CartWorkflow.paymentMethod(paymentMethod)
+          return
+        else # card errors are returned in transaction
+          handleStripeSubmitError(transaction.error)
+          # Hide processing UI
+          uiEnd(template, "Resubmit payment")
+          return
+
+    return false;
 
   beginSubmit: (formId, template) ->
     # Show Processing
