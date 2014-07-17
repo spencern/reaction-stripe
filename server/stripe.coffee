@@ -27,9 +27,6 @@ Meteor.methods
           saved: true
           payment: payment
       return
-    , (e) ->
-      console.error e
-      return
       
     fut.wait()
     
