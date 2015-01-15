@@ -1,8 +1,5 @@
-
-#TODO: Better SimpleSchema Validation?
-
-@StripePackageSchema = new SimpleSchema([
-  PackageConfigSchema
+ReactionCore.Schemas.StripePackageConfig = new SimpleSchema([
+  ReactionCore.Schemas.PackageConfig
   {
     "settings.api_key":
       type: String
@@ -10,9 +7,7 @@
   }
 ])
 
-StripePackageSchema = @StripePackageSchema
-
-@StripePaymentSchema = new SimpleSchema
+ReactionCore.Schemas.StripePayment = new SimpleSchema
   payerName:
     type: String
     label: "Cardholder name"
@@ -32,20 +27,3 @@ StripePackageSchema = @StripePackageSchema
     type: String
     max: 4
     label: "CVV"
-
-StripePaymentSchema = @StripePaymentSchema
-
-###
-# Fixture - we always want a record
-###
-Meteor.startup ->
-  unless Packages.findOne({name:"reaction-stripe"})
-    Shops.find().forEach (shop) ->
-      unless Meteor.settings.stripe
-        Meteor.settings.stripe =
-          api_key: ""
-
-      Packages.insert
-        shopId: shop._id
-        name: "reaction-stripe"
-        settings: Meteor.settings.stripe

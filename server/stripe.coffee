@@ -7,12 +7,12 @@ Meteor.methods
   #submit (sale, authorize)
   stripeSubmit: (cardData, paymentData) ->
 
-    api_key = Packages.findOne(name: "reaction-stripe").settings.api_key
+    api_key = ReactionCore.Collections.Packages.findOne(name: "reaction-stripe").settings.api_key
     Stripe = Npm.require("stripe")(api_key)
 
     fut = new Future()
     @unblock()
-    
+
     Stripe.charges.create
       amount: paymentData.amount
       currency: paymentData.currency
@@ -27,6 +27,6 @@ Meteor.methods
           saved: true
           payment: payment
       return
-      
+
     fut.wait()
-    
+

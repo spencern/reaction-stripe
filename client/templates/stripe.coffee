@@ -1,6 +1,6 @@
 Template.stripe.helpers
   packageData: ->
-    return Packages.findOne({name:"reaction-stripe"})
+    return ReactionCore.Collections.Packages.findOne({name:"reaction-stripe"})
 
 AutoForm.hooks "stripe-update-form":
   onSuccess: (operation, result, template) ->
