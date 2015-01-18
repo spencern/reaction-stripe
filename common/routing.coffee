@@ -4,5 +4,4 @@ Router.map ->
     path: 'dashboard/settings/stripe',
     template: 'stripe'
     waitOn: ->
-      PackagesHandle
-      
+      return ReactionCore.Subscriptions.Packages
