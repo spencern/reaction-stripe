@@ -20,18 +20,9 @@ paymentAlert = (errorMessage) ->
 hidePaymentAlert = () ->
   $(".alert").addClass("hidden").text('')
 
-handlePaypalSubmitError = (error) -> #Paypal Error Handling
-  singleError = error?.response?.error_description
-  serverError = error?.response?.message
-  errors = error?.response?.details || []
-  if singleError
-    paymentAlert("Oops! " + singleError)
-  else if errors.length
-    for error in errors
-      formattedError = "Oops! " + error.issue + ": " + error.field.split(/[. ]+/).pop().replace(/_/g,' ')
-      paymentAlert(formattedError)
-  else if serverError
-    paymentAlert("Oops! " + serverError)
+handleStripeSubmitError = (error) -> #Stripe Error Handling
+  if error?.message
+    paymentAlert error.message
 
 Template.stripePaymentForm.helpers
   cartPayerName: ->
@@ -84,18 +75,18 @@ AutoForm.addHooks "stripe-payment-form",
 
     paymentData = {
       # Stripe requires the amount to be a positive integer in the smallest currency unit (cent)
-      amount: parseFloat(Session.get("cartTotal")) * 100 # Assumes currency is USD. Need to refactor to be based on shop currency
+      amount: parseInt(Session.get("cartTotal")) * 100 # Assumes currency is USD. Need to refactor to be based on shop currency
       currency: "usd" # Shops.findOne().currency
     }
 
     # Reaction only stores type and 4 digits
     storedCard = getCardType(doc.cardNumber).charAt(0).toUpperCase() + getCardType(doc.cardNumber).slice(1) + " " + doc.cardNumber.slice(-4)
 
-    
+
     # Order Layout
     $(".list-group a").css("text-decoration", "none")
     $(".list-group-item").removeClass("list-group-item")
-    
+
     Meteor.call "stripeSubmit", cardData, paymentData
     , (error, transaction) ->
       submitting = false
@@ -108,12 +99,12 @@ AutoForm.addHooks "stripe-payment-form",
       else
         if transaction.saved is true #successful transaction
 
-          # This is where we need to decide how much of the Stripe  
+          # This is where we need to decide how much of the Stripe
           # response object we need to pass to CartWorkflow
           paymentMethod =
             processor: "Stripe"
             storedCard: storedCard
-            method: transaction.payment.payer.payment_method
+            method: transaction.payment.card.brand
             transactionId: transaction.payment.id
             amount: transaction.payment.amount
             status: transaction.payment.state
