@@ -104,11 +104,12 @@ AutoForm.addHooks "stripe-payment-form",
           paymentMethod =
             processor: "Stripe"
             storedCard: storedCard
-            method: transaction.payment.card.brand
+            method: transaction.payment.card.funding
             transactionId: transaction.payment.id
             amount: transaction.payment.amount
-            status: transaction.payment.state
-            mode: transaction.payment.intent
+            # not sure what the stripe equivalents are here
+            # status: transaction.payment.state
+            # mode: transaction.payment.intent
             createdAt: new Date(transaction.payment.create_time)
             updatedAt: new Date(transaction.payment.update_time)
 
