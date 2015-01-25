@@ -91,11 +91,6 @@ AutoForm.addHooks "stripe-payment-form",
     # Reaction only stores type and 4 digits
     storedCard = getCardType(doc.cardNumber).charAt(0).toUpperCase() + getCardType(doc.cardNumber).slice(1) + " " + doc.cardNumber.slice(-4)
 
-    
-    # Order Layout
-    $(".list-group a").css("text-decoration", "none")
-    $(".list-group-item").removeClass("list-group-item")
-    
     Meteor.call "stripeSubmit", cardData, paymentData
     , (error, transaction) ->
       submitting = false
@@ -108,7 +103,7 @@ AutoForm.addHooks "stripe-payment-form",
       else
         if transaction.saved is true #successful transaction
 
-          # This is where we need to decide how much of the Stripe  
+          # This is where we need to decide how much of the Stripe
           # response object we need to pass to CartWorkflow
           paymentMethod =
             processor: "Stripe"
