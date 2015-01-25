@@ -82,11 +82,6 @@ AutoForm.addHooks "stripe-payment-form",
     # Reaction only stores type and 4 digits
     storedCard = getCardType(doc.cardNumber).charAt(0).toUpperCase() + getCardType(doc.cardNumber).slice(1) + " " + doc.cardNumber.slice(-4)
 
-
-    # Order Layout
-    $(".list-group a").css("text-decoration", "none")
-    $(".list-group-item").removeClass("list-group-item")
-
     Meteor.call "stripeSubmit", cardData, paymentData
     , (error, transaction) ->
       submitting = false
