@@ -21,22 +21,40 @@ hidePaymentAlert = () ->
   $(".alert").addClass("hidden").text('')
 
 handleStripeSubmitError = (error) ->
+  singleError = error
+  serverError = error?.message
+  if singleError
+    paymentAlert "Oops! #{singleError}"
+  else if serverError
+    paymentAlert "Oops! #{serverError}"
 
-  console.log error
+Template.stripePaymentForm.helpers
+  monthOptions: () ->
+    monthOptions =
+      [
+        { value: "", label: "Choose month"}
+        { value: "01", label: "1 - January"}
+        { value: "02", label: "2 - February" }
+        { value: "03", label: "3 - March" }
+        { value: "04", label: "4 - April" }
+        { value: "05", label: "5 - May" }
+        { value: "06", label: "6 - June" }
+        { value: "07", label: "7 - July" }
+        { value: "08", label: "8 - August" }
+        { value: "09", label: "9 - September" }
+        { value: "10", label: "10 - October" }
+        { value: "11", label: "11 - November" }
+        { value: "12", label: "12 - December" }
+      ]
+    monthOptions
 
-  # Depending on what they are, errors come back from PayPal in various formats
-  # singleError = error?.response?.error_description
-  # serverError = error?.response?.message
-  # errors = error?.response?.details || []
-  # if singleError
-  #   paymentAlert("Oops! " + singleError)
-  # else if errors.length
-  #   for error in errors
-  #     formattedError = "Oops! " + error.issue + ": " + error.field.split(/[. ]+/).pop().replace(/_/g,' ')
-  #     paymentAlert(formattedError)
-  # else if serverError
-  #   paymentAlert("Oops! " + serverError)
-
+  yearOptions: () ->
+    yearOptions = [{ value: "", label: "Choose year" }]
+    year = new Date().getFullYear()
+    for x in [1...9] by 1
+      yearOptions.push { value: year , label: year}
+      year++
+    yearOptions
 
 # used to track asynchronous submitting for UI changes
 submitting = false
@@ -48,13 +66,9 @@ AutoForm.addHooks "stripe-payment-form",
     template = this.template
     hidePaymentAlert()
 
-    # regEx in the schema ensures that there will be exactly two names with one space between
-    payerNamePieces = doc.payerName.split " "
-
-    # Format data for stripe
+    # Format data
     form = {
-      first_name: payerNamePieces[0]
-      last_name: payerNamePieces[1]
+      name: doc.payerName
       number: doc.cardNumber
       expire_month: doc.expireMonth
       expire_year: doc.expireYear
@@ -83,17 +97,36 @@ AutoForm.addHooks "stripe-payment-form",
         return
       else
         if transaction.saved is true #successful transaction
+
+          # Normalize status
+          normalizedStatus = switch
+            when not transaction.charge.paid and not transaction.charge.failure_code then "created"
+            when transaction.charge.paid is true then "settled"
+            when transaction.charge.failure_code then "failed"
+            else "failed"
+          # Status schema for reference:
+          #   type: String
+          #   allowedValues: ["created", "approved", "failed", "canceled", "expired", "pending", "voided", "settled"]
+
+          # Normalize mode
+          normalizedMode = switch
+            when not transaction.charge.paid and not transaction.charge.failure_code then "authorize"
+            when transaction.charge.captured then "capture"
+            else "capture"
+          # Mode schema for reference:
+          #   type: String
+          #   allowedValues: ["authorize", 'capture','refund','void']
+
           # Format the transaction to store with order and submit to CartWorkflow
           paymentMethod =
             processor: "Stripe"
             storedCard: storedCard
-            method: transaction.payment.payer.payment_method
-            transactionId: transaction.payment.transactions[0].related_resources[0].authorization.id
-            amount: transaction.payment.transactions[0].amount.total
-            status: transaction.payment.state
-            mode: transaction.payment.intent
-            createdAt: new Date(transaction.payment.create_time)
-            updatedAt: new Date(transaction.payment.update_time)
+            method: transaction.charge.card.funding
+            transactionId: transaction.charge.id
+            amount: transaction.charge.amount * 0.01
+            status: normalizedStatus
+            mode: normalizedMode
+            createdAt: new Date(transaction.charge.created)
 
           # Store transaction information with order
           # paymentMethod will auto transition to

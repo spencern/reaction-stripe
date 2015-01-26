@@ -29,25 +29,26 @@ Meteor.Stripe =
     return
 
   paymentObj: ->
-    intent: "sale"
-    payer:
-      payment_method: "credit_card"
-      funding_instruments: []
-    transactions: []
+    amount: ""
+    currency: ""
+    card: {}
+    capture: true
+
+    # intent: "sale"
+    # payer:
+    #   payment_method: "credit_card"
+    #   funding_instruments: []
+    # transactions: []
 
   #parseCardData splits up the card data and puts it into a stripe friendly format.
   parseCardData: (data) ->
-    credit_card:
-      type: data.type
-      number: data.number
-      first_name: data.first_name
-      last_name: data.last_name
-      cvv2: data.cvv2
-      expire_month: data.expire_month
-      expire_year: data.expire_year
+    number: data.number
+    name: data.name
+    cvc: data.cvv2
+    exp_month: data.expire_month
+    exp_year: data.expire_year
 
   #parsePaymentData splits up the card data and gets it into a stripe friendly format.
   parsePaymentData: (data) ->
-    amount:
-      total: data.total
-      currency: data.currency
+    total: parseFloat(data.total) * 100
+    currency: data.currency

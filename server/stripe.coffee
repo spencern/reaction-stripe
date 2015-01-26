@@ -6,14 +6,17 @@ Meteor.methods
   stripeSubmit: (transactionType, cardData, paymentData) ->
     Stripe = Npm.require("stripe")(Meteor.Stripe.accountOptions())
     paymentObj = Meteor.Stripe.paymentObj()
-    paymentObj.intent = transactionType
-    paymentObj.payer.funding_instruments.push Meteor.Stripe.parseCardData(cardData)
-    paymentObj.transactions.push Meteor.Stripe.parsePaymentData(paymentData)
+    if transactionType is "authorize"
+      paymentObj.capture = false
+    paymentObj.card = Meteor.Stripe.parseCardData(cardData)
+    paymentData = Meteor.Stripe.parsePaymentData(paymentData)
+    paymentObj.amount = paymentData.total
+    paymentObj.currency = paymentData.currency
 
     fut = new Future()
     @unblock()
 
-    Stripe.payment.create paymentObj, Meteor.bindEnvironment((err, payment) ->
+    Stripe.charges.create paymentObj, Meteor.bindEnvironment((err, charge) ->
       if err
         fut.return
           saved: false
@@ -21,7 +24,7 @@ Meteor.methods
       else
         fut.return
           saved: true
-          payment: payment
+          charge: charge
       return
     , (e) ->
       ReactionCore.Events.warn e
