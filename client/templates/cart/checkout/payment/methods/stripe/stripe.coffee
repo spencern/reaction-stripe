@@ -104,18 +104,12 @@ AutoForm.addHooks "stripe-payment-form",
             when transaction.charge.captured is true and not transaction.charge.failure_code then "settled"
             when transaction.charge.failure_code then "failed"
             else "failed"
-          # Status schema for reference:
-          #   type: String
-          #   allowedValues: ["created", "approved", "failed", "canceled", "expired", "pending", "voided", "settled"]
 
           # Normalize mode
           normalizedMode = switch
             when not transaction.charge.captured and not transaction.charge.failure_code then "authorize"
             when transaction.charge.captured then "capture"
             else "capture"
-          # Mode schema for reference:
-          #   type: String
-          #   allowedValues: ["authorize", 'capture','refund','void']
 
           # Format the transaction to store with order and submit to CartWorkflow
           paymentMethod =

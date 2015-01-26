@@ -5,14 +5,14 @@ Meteor.Stripe =
     settings = ReactionCore.Collections.Packages.findOne(name: "reaction-stripe").settings
     return settings.api_key
 
-  #authorize submits a payment authorization to Stripe
+  # submit a payment authorization to Stripe
   authorize: (cardInfo, paymentInfo, callback) ->
     Meteor.call "stripeSubmit", "authorize", cardInfo, paymentInfo, callback
     return
 
-  # purchase: function(card_info, payment_info, callback){
-  #   Meteor.call('stripeSubmit', 'sale', card_info, payment_info, callback);
-  # },
+  # TODO - add a "charge" function that creates a new charge and captures all at once
+
+  # capture an existing charge, can capture a portion or whole amount.
   capture: (transactionId, amount, callback) ->
     captureDetails =
       amount: amount
@@ -20,7 +20,7 @@ Meteor.Stripe =
     Meteor.call "stripeCapture", transactionId, captureDetails, callback
     return
 
-  #config is for the stripe configuration settings.
+  # config is for the stripe configuration settings.
   config: (options) ->
     @accountOptions = options
     return
@@ -32,7 +32,7 @@ Meteor.Stripe =
     capture: true
     currency: ""
 
-  #parseCardData splits up the card data and puts it into a stripe friendly format.
+  # parseCardData puts card data into a stripe friendly format.
   parseCardData: (data) ->
     number: data.number
     name: data.name
