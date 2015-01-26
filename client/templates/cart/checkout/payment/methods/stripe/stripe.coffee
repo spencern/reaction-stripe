@@ -20,40 +20,23 @@ paymentAlert = (errorMessage) ->
 hidePaymentAlert = () ->
   $(".alert").addClass("hidden").text('')
 
-handleStripeSubmitError = (error) -> #Stripe Error Handling
-  if error?.message
-    paymentAlert error.message
+handleStripeSubmitError = (error) ->
 
-Template.stripePaymentForm.helpers
-  cartPayerName: ->
-    Cart.findOne()?.payment?.address?.fullName
+  console.log error
 
-  monthOptions: () ->
-    monthOptions =
-      [
-        { value: "", label: "Choose month"}
-        { value: "01", label: "1 - January"}
-        { value: "02", label: "2 - February" }
-        { value: "03", label: "3 - March" }
-        { value: "04", label: "4 - April" }
-        { value: "05", label: "5 - May" }
-        { value: "06", label: "6 - June" }
-        { value: "07", label: "7 - July" }
-        { value: "08", label: "8 - August" }
-        { value: "09", label: "9 - September" }
-        { value: "10", label: "10 - October" }
-        { value: "11", label: "11 - November" }
-        { value: "12", label: "12 - December" }
-      ]
-    monthOptions
+  # Depending on what they are, errors come back from PayPal in various formats
+  # singleError = error?.response?.error_description
+  # serverError = error?.response?.message
+  # errors = error?.response?.details || []
+  # if singleError
+  #   paymentAlert("Oops! " + singleError)
+  # else if errors.length
+  #   for error in errors
+  #     formattedError = "Oops! " + error.issue + ": " + error.field.split(/[. ]+/).pop().replace(/_/g,' ')
+  #     paymentAlert(formattedError)
+  # else if serverError
+  #   paymentAlert("Oops! " + serverError)
 
-  yearOptions: () ->
-    yearOptions = [{ value: "", label: "Choose year" }]
-    year = new Date().getFullYear()
-    for x in [1...9] by 1
-      yearOptions.push { value: year , label: year}
-      year++
-    yearOptions
 
 # used to track asynchronous submitting for UI changes
 submitting = false
@@ -65,29 +48,31 @@ AutoForm.addHooks "stripe-payment-form",
     template = this.template
     hidePaymentAlert()
 
-    cardData = {
-      name: doc.payerName
-      number: doc.cardNumber
-      exp_month: doc.expireMonth
-      exp_year: doc.expireYear
-      cvc: doc.cvv
-    }
+    # regEx in the schema ensures that there will be exactly two names with one space between
+    payerNamePieces = doc.payerName.split " "
 
-    paymentData = {
-      # Stripe requires the amount to be a positive integer in the smallest currency unit (cent)
-      amount: parseInt(Session.get("cartTotal")) * 100
-      currency: Shops.findOne().currency
+    # Format data for stripe
+    form = {
+      first_name: payerNamePieces[0]
+      last_name: payerNamePieces[1]
+      number: doc.cardNumber
+      expire_month: doc.expireMonth
+      expire_year: doc.expireYear
+      cvv2: doc.cvv
+      type: getCardType(doc.cardNumber)
     }
 
     # Reaction only stores type and 4 digits
-    storedCard = getCardType(doc.cardNumber).charAt(0).toUpperCase() + getCardType(doc.cardNumber).slice(1) + " " + doc.cardNumber.slice(-4)
-
+    storedCard = form.type.charAt(0).toUpperCase() + form.type.slice(1) + " " + doc.cardNumber.slice(-4)
 
     # Order Layout
     $(".list-group a").css("text-decoration", "none")
     $(".list-group-item").removeClass("list-group-item")
 
-    Meteor.call "stripeSubmit", cardData, paymentData
+    # Submit for processing
+    Meteor.Stripe.authorize form,
+      total: Session.get "cartTotal"
+      currency: Shops.findOne().currency
     , (error, transaction) ->
       submitting = false
       if error
@@ -98,18 +83,15 @@ AutoForm.addHooks "stripe-payment-form",
         return
       else
         if transaction.saved is true #successful transaction
-
-          # This is where we need to decide how much of the Stripe
-          # response object we need to pass to CartWorkflow
+          # Format the transaction to store with order and submit to CartWorkflow
           paymentMethod =
             processor: "Stripe"
             storedCard: storedCard
-            method: transaction.payment.card.funding
-            transactionId: transaction.payment.id
-            amount: transaction.payment.amount
-            # not sure what the stripe equivalents are here
-            # status: transaction.payment.state
-            # mode: transaction.payment.intent
+            method: transaction.payment.payer.payment_method
+            transactionId: transaction.payment.transactions[0].related_resources[0].authorization.id
+            amount: transaction.payment.transactions[0].amount.total
+            status: transaction.payment.state
+            mode: transaction.payment.intent
             createdAt: new Date(transaction.payment.create_time)
             updatedAt: new Date(transaction.payment.update_time)
 

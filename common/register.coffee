@@ -6,11 +6,14 @@ ReactionCore.registerPackage
   description: "Stripe Payment for Reaction Commerce"
   icon: 'fa fa-shopping-cart'
   settingsRoute: "stripe"
-  hasWidget: true
+  defaultSettings:
+    mode: false
+    api_key: ""
   priority: "2"
+  hasWidget: true
   shopPermissions: [
     {
-      label: "Stripe Payments"
+      label: "Stripe"
       permission: "dashboard/payments"
       group: "Shop Settings"
     }

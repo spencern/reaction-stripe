@@ -1,7 +1,7 @@
 Package.describe({
-  summary: "Reaction Stripe - Stripe Payment Module for Reaction commerce",
+  summary: "Reaction Stripe - Stripe payments for Reaction Commerce",
   name: "reactioncommerce:reaction-stripe",
-  version: "1.0.0",
+  version: "0.1.0",
   git: "https://github.com/reactioncommerce/reaction-stripe.git"
 });
 
@@ -14,21 +14,21 @@ Package.onUse(function (api, where) {
   api.use("less");
   api.use("reactioncommerce:core@0.2.2");
 
-  api.add_files("common/collections.coffee", ["client","server"]);
-  api.add_files("common/register.coffee", ["client","server"]);
-  api.add_files("common/routing.coffee", ["client","server"]);
-
-  api.add_files("server/stripe.coffee",["server"]);
-
   api.add_files([
+    "common/register.coffee",
+    "common/collections.coffee",
+    "lib/stripe.coffee"
+    ],["client","server"]);
+  api.add_files("server/stripe.coffee",["server"]);
+  api.add_files([
+    "client/routing.coffee",
     "client/templates/stripe.html",
+    "client/templates/stripe.less",
     "client/templates/stripe.coffee",
-    "client/templates/stripePaymentForm/stripePaymentForm.html",
-    "client/templates/stripePaymentForm/stripePaymentForm.coffee"
-  ], ["client"]);
-
-  api.export([
-    "StripePackageSchema",
-  ], ["client", "server"]);
+    "client/templates/cart/checkout/payment/methods/stripe/stripe.html",
+    "client/templates/cart/checkout/payment/methods/stripe/stripe.less",
+    "client/templates/cart/checkout/payment/methods/stripe/stripe.coffee"
+    ],
+    ["client"]);
 
 });
