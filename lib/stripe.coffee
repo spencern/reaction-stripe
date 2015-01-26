@@ -15,10 +15,7 @@ Meteor.Stripe =
   # },
   capture: (transactionId, amount, callback) ->
     captureDetails =
-      amount:
-        currency: "USD"
-        total: amount
-      is_final_capture: true
+      amount: amount
 
     Meteor.call "stripeCapture", transactionId, captureDetails, callback
     return
