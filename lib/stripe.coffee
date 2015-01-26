@@ -28,17 +28,12 @@ Meteor.Stripe =
     @accountOptions = options
     return
 
-  paymentObj: ->
+  chargeObj: ->
     amount: ""
     currency: ""
     card: {}
     capture: true
-
-    # intent: "sale"
-    # payer:
-    #   payment_method: "credit_card"
-    #   funding_instruments: []
-    # transactions: []
+    currency: ""
 
   #parseCardData splits up the card data and puts it into a stripe friendly format.
   parseCardData: (data) ->
@@ -47,8 +42,3 @@ Meteor.Stripe =
     cvc: data.cvv2
     exp_month: data.expire_month
     exp_year: data.expire_year
-
-  #parsePaymentData splits up the card data and gets it into a stripe friendly format.
-  parsePaymentData: (data) ->
-    total: parseFloat(data.total) * 100
-    currency: data.currency

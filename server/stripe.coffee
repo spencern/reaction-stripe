@@ -5,18 +5,17 @@ Meteor.methods
   #submit (sale, authorize)
   stripeSubmit: (transactionType, cardData, paymentData) ->
     Stripe = Npm.require("stripe")(Meteor.Stripe.accountOptions())
-    paymentObj = Meteor.Stripe.paymentObj()
+    chargeObj = Meteor.Stripe.chargeObj()
     if transactionType is "authorize"
-      paymentObj.capture = false
-    paymentObj.card = Meteor.Stripe.parseCardData(cardData)
-    paymentData = Meteor.Stripe.parsePaymentData(paymentData)
-    paymentObj.amount = paymentData.total
-    paymentObj.currency = paymentData.currency
+      chargeObj.capture = false
+    chargeObj.card = Meteor.Stripe.parseCardData(cardData)
+    chargeObj.amount = parseFloat(paymentData.total) * 100
+    chargeObj.currency = paymentData.currency
 
     fut = new Future()
     @unblock()
 
-    Stripe.charges.create paymentObj, Meteor.bindEnvironment((err, charge) ->
+    Stripe.charges.create chargeObj, Meteor.bindEnvironment((err, charge) ->
       if err
         fut.return
           saved: false

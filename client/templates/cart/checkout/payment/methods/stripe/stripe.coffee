@@ -23,10 +23,10 @@ hidePaymentAlert = () ->
 handleStripeSubmitError = (error) ->
   singleError = error
   serverError = error?.message
-  if singleError
-    paymentAlert "Oops! #{singleError}"
-  else if serverError
+  if serverError
     paymentAlert "Oops! #{serverError}"
+  else if singleError
+    paymentAlert "Oops! #{singleError}"
 
 Template.stripePaymentForm.helpers
   monthOptions: () ->
@@ -100,8 +100,8 @@ AutoForm.addHooks "stripe-payment-form",
 
           # Normalize status
           normalizedStatus = switch
-            when not transaction.charge.paid and not transaction.charge.failure_code then "created"
-            when transaction.charge.paid is true then "settled"
+            when not transaction.charge.captured and not transaction.charge.failure_code then "created"
+            when transaction.charge.captured is true and not transaction.charge.failure_code then "settled"
             when transaction.charge.failure_code then "failed"
             else "failed"
           # Status schema for reference:
@@ -110,7 +110,7 @@ AutoForm.addHooks "stripe-payment-form",
 
           # Normalize mode
           normalizedMode = switch
-            when not transaction.charge.paid and not transaction.charge.failure_code then "authorize"
+            when not transaction.charge.captured and not transaction.charge.failure_code then "authorize"
             when transaction.charge.captured then "capture"
             else "capture"
           # Mode schema for reference:
