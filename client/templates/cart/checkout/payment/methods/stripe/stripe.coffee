@@ -121,7 +121,8 @@ AutoForm.addHooks "stripe-payment-form",
             status: normalizedStatus
             mode: normalizedMode
             createdAt: new Date(transaction.charge.created)
-            transactions: transaction.charge
+            transactions: []
+          paymentMethod.transactions.push transaction.charge
 
           # Store transaction information with order
           # paymentMethod will auto transition to
