@@ -45,7 +45,7 @@ Meteor.Stripe.authorize
   # Deal with Error
   else
   # results contains boolean for saved
-  # and a payment object with information about the transaction
+  # and a charge object with information about the transaction
 ```
 
 ```coffeescript
@@ -56,7 +56,7 @@ Meteor.Stripe.capture "<stripe charge id>",
     # Deal with Error
   else
     # results contains boolean for saved
-    # and a payment object with information about the transaction
+    # and a capture object with information about the transaction
 ```
 
 Note: this package automatically converts the total charge amount into smallest currency units as is required by Stripe before the API call is made.
