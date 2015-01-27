@@ -4,7 +4,7 @@ ReactionCore.registerPackage
   paymentTemplate: "stripePaymentForm"
   label: "Stripe"
   description: "Stripe Payment for Reaction Commerce"
-  icon: 'fa fa-shopping-cart'
+  icon: 'fa fa-cc-stripe'
   settingsRoute: "stripe"
   defaultSettings:
     mode: false
