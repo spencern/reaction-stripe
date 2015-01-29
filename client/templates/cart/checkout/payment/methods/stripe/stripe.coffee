@@ -96,29 +96,29 @@ AutoForm.addHooks "stripe-payment-form",
 
           # Normalize status
           normalizedStatus = switch
-            when not transaction.charge.captured and not transaction.charge.failure_code then "created"
-            when transaction.charge.captured is true and not transaction.charge.failure_code then "settled"
-            when transaction.charge.failure_code then "failed"
+            when not transaction.response.captured and not transaction.response.failure_code then "created"
+            when transaction.response.captured is true and not transaction.response.failure_code then "settled"
+            when transaction.response.failure_code then "failed"
             else "failed"
 
           # Normalize mode
           normalizedMode = switch
-            when not transaction.charge.captured and not transaction.charge.failure_code then "authorize"
-            when transaction.charge.captured then "capture"
+            when not transaction.response.captured and not transaction.response.failure_code then "authorize"
+            when transaction.response.captured then "capture"
             else "capture"
 
           # Format the transaction to store with order and submit to CartWorkflow
           paymentMethod =
             processor: "Stripe"
             storedCard: storedCard
-            method: transaction.charge.card.funding
-            transactionId: transaction.charge.id
-            amount: transaction.charge.amount * 0.01
+            method: transaction.response.card.funding
+            transactionId: transaction.response.id
+            amount: transaction.response.amount * 0.01
             status: normalizedStatus
             mode: normalizedMode
-            createdAt: new Date(transaction.charge.created)
+            createdAt: new Date(transaction.response.created)
             transactions: []
-          paymentMethod.transactions.push transaction.charge
+          paymentMethod.transactions.push transaction.response
 
           # Store transaction information with order
           # paymentMethod will auto transition to

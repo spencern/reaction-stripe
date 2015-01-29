@@ -15,15 +15,15 @@ Meteor.methods
     fut = new Future()
     @unblock()
 
-    Stripe.charges.create chargeObj, Meteor.bindEnvironment((err, charge) ->
-      if err
+    Stripe.charges.create chargeObj, Meteor.bindEnvironment((error, result) ->
+      if error
         fut.return
           saved: false
-          error: err
+          error: error
       else
         fut.return
           saved: true
-          charge: charge
+          response: result
       return
     , (e) ->
       ReactionCore.Events.warn e
@@ -37,7 +37,7 @@ Meteor.methods
 
     fut = new Future()
     @unblock()
-    Stripe.charges.capture transactionId, captureDetails, Meteor.bindEnvironment((error, capture) ->
+    Stripe.charges.capture transactionId, captureDetails, Meteor.bindEnvironment((error, result) ->
       if error
         fut.return
           saved: false
@@ -45,7 +45,7 @@ Meteor.methods
       else
         fut.return
           saved: true
-          capture: capture
+          response: result
       return
     , (e) ->
       ReactionCore.Events.warn e
