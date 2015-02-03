@@ -28,7 +28,6 @@ handleStripeSubmitError = (error) ->
   else if singleError
     paymentAlert "Oops! #{singleError}"
 
-Template.stripePaymentForm.helpers
 # used to track asynchronous submitting for UI changes
 submitting = false
 
