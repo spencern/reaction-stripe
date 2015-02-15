@@ -1,14 +1,3 @@
-getCardType = (number) ->
-  re = new RegExp("^4")
-  return "visa"  if number.match(re)?
-  re = new RegExp("^(34|37)")
-  return "amex"  if number.match(re)?
-  re = new RegExp("^5[1-5]")
-  return "mastercard"  if number.match(re)?
-  re = new RegExp("^6011")
-  return "discover"  if number.match(re)?
-  ""
-
 uiEnd = (template, buttonText) ->
   template.$(":input").removeAttr("disabled")
   template.$("#btn-complete-order").text(buttonText)
@@ -28,7 +17,6 @@ handleStripeSubmitError = (error) ->
   else if singleError
     paymentAlert "Oops! #{singleError}"
 
-Template.stripePaymentForm.helpers
 # used to track asynchronous submitting for UI changes
 submitting = false
 
