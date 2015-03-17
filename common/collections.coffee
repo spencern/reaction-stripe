@@ -11,9 +11,10 @@ ReactionCore.Schemas.StripePackageConfig = new SimpleSchema([
     "settings.mode":
       type: Boolean
       defaultValue: false
+    # Use secret key for now. API Client ID will be useful for Marketplace.
     "settings.api_key":
       type: String
-      label: "API Client ID"
+      label: "Secret Key"
   }
 ])
 
